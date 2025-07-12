@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace IntegradorApi.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
+
     public class IntegracaoController : Controller
     {
         private readonly IIntegracaoService _integracaoService;

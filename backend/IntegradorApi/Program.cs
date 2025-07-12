@@ -1,5 +1,7 @@
 using IntegradorApi.Application.Interfaces;
 using IntegradorApi.Application.Services;
+using IntegradorApi.Infrastructure.AzureDevOps;
+using IntegradorApi.Infrastructure.Interfaces;
 using IntegradorApi.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +30,9 @@ builder.Services.AddScoped<IParametroService, ParametroService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IIntegracaoService, IntegracaoService>();
+builder.Services.AddScoped<IAzureDevOpsClient, AzureDevOpsClient>();
+
 
 var app = builder.Build();
 

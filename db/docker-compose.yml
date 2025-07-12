@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.5
+    restart: always
+    container_name: mariadb-integrador
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: integrador
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  mariadb_data:

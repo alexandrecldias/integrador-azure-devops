@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using IntegradorApi.Persistence;
-using IntegradorApi.Application;
-using Microsoft.EntityFrameworkCore;
+﻿using IntegradorApi.Application;
+using IntegradorApi.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace IntegradorApi.Controllers;
 
@@ -9,40 +8,36 @@ namespace IntegradorApi.Controllers;
 [Route("api/[controller]")]
 public class ParametroController : ControllerBase
 {
-    private readonly AppDbContext _context;
+    private readonly IParametroService _service;
 
-    public ParametroController(AppDbContext context)
+    public ParametroController(IParametroService service)
     {
-        _context = context;
-    }
-
-    [HttpGet("{chave}")]
-    public IActionResult Get(string chave)
-    {
-        var param = _context.Parametros.FirstOrDefault(p => p.Chave == chave);
-        if (param == null) return NotFound();
-
-        return Ok(param);
+        _service = service;
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public async Task<IActionResult> GetAll()
     {
-        return Ok(_context.Parametros.ToList());
+        var parametros = await _service.ObterTodosAsync();
+        return Ok(parametros);
+    }
+
+    [HttpGet("{chave}")]
+    public async Task<IActionResult> Get(string chave)
+    {
+        var parametro = await _service.ObterPorChaveAsync(chave);
+        if (parametro == null) return NotFound();
+
+        return Ok(parametro);
     }
 
     [HttpPut("{chave}")]
     public async Task<IActionResult> Put(string chave, [FromBody] AtualizarParametroRequest request)
     {
-        var parametro = await _context.Parametros.FirstOrDefaultAsync(p => p.Chave == chave);
-        if (parametro == null)
+        var sucesso = await _service.AtualizarValorAsync(chave, request.Valor);
+        if (!sucesso)
             return NotFound(new { mensagem = "Parâmetro não encontrado" });
 
-        parametro.Valor = request.Valor;
-
-        await _context.SaveChangesAsync();
-
-        return Ok(new { mensagem = "Parâmetro atualizado com sucesso", parametro });
+        return Ok(new { mensagem = "Parâmetro atualizado com sucesso" });
     }
-
 }

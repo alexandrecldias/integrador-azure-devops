@@ -1,0 +1,45 @@
+<div class="container">
+  <aside [class.menu-closed]="!isMenuOpen">
+    <div class="menu-header">
+      <button (click)="toggleMenu()">☰</button>
+      <h2>Menu</h2>
+    </div>
+    <nav>
+      <ul>
+        <!-- Configurações -->
+        <li>
+          <span class="menu-item-parent" (click)="toggleConfiguracoesSubmenu()">
+            Configurações
+            <span class="arrow" [class.rotated]="isConfiguracoesSubmenuOpen">▼</span>
+          </span>
+          <ul *ngIf="isConfiguracoesSubmenuOpen" class="submenu">
+            <li>
+              <a routerLink="/configuracoes/parametrizacao" routerLinkActive="active-link">
+                Parametrização
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Processamento -->
+        <li>
+          <span class="menu-item-parent" (click)="toggleProcessamentoSubmenu()">
+            Processamento
+            <span class="arrow" [class.rotated]="isProcessamentoSubmenuOpen">▼</span>
+          </span>
+          <ul *ngIf="isProcessamentoSubmenuOpen" class="submenu">
+            <li>
+              <a routerLink="/processamento/clonar-tasks" routerLinkActive="active-link">
+                Clonar Tasks
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>

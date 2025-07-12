@@ -1,0 +1,117 @@
+.parametrizacao-container {
+  padding: 20px;
+  background-color: var(--background-main);
+  border-radius: var(--border-radius-base);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+  color: var(--primary-color);
+  margin-bottom: 25px;
+  font-size: 2em;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+.button-group {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px; /* Espaçamento entre os botões */
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-save {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+}
+
+.btn-save:hover {
+  background-color: #0056b3; /* Tom mais escuro de azul */
+  transform: translateY(-1px);
+}
+
+.btn-back {
+  background-color: var(--secondary-color);
+  color: var(--text-light);
+}
+
+.btn-back:hover {
+  background-color: #5a6268; /* Tom mais escuro de cinza */
+  transform: translateY(-1px);
+}
+
+.loading-indicator, .no-data {
+  text-align: center;
+  padding: 30px;
+  color: var(--secondary-color);
+  font-style: italic;
+}
+
+.parametros-grid {
+  overflow-x: auto; /* Para grids maiores em telas menores */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Remove espaçamento entre células */
+  margin-top: 15px;
+  background-color: var(--background-main);
+  border-radius: var(--border-radius-base);
+  overflow: hidden; /* Para que o border-radius funcione com as bordas da tabela */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+table thead {
+  background-color: var(--primary-light); /* Fundo claro para o cabeçalho */
+}
+
+table th {
+  text-align: left;
+  padding: 12px 15px;
+  color: var(--primary-color);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+}
+
+table td {
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle; /* Alinha o conteúdo da célula no meio */
+}
+
+table tbody tr:hover {
+  background-color: var(--hover-bg); /* Efeito de hover na linha */
+}
+
+table tbody tr:last-child td {
+  border-bottom: none; /* Remove a borda da última linha */
+}
+
+.input-valor {
+  width: 100%; /* Ocupa a largura total da célula */
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1em;
+  color: var(--text-dark);
+  box-sizing: border-box; /* Garante que padding e border sejam incluídos na largura */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-valor:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Sombra de foco azul */
+  outline: none; /* Remove o contorno padrão do navegador */
+}
+
+button {
+  margin-top: 24px;
+}

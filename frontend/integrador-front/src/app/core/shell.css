@@ -1,0 +1,171 @@
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Sidebar Styling */
+aside {
+  width: 250px;
+  background-color: var(--background-sidebar);
+  padding: var(--padding-base) 0; /* Padding superior/inferior, 0 nas laterais para controle interno */
+  box-shadow: 2px 0 10px var(--shadow-color);
+  transition: width 0.3s ease, padding 0.3s ease;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estado do menu fechado */
+aside.menu-closed {
+  width: 70px;
+  padding: var(--padding-base) 10px; /* Padding menor quando fechado */
+}
+
+aside.menu-closed .menu-header h2 {
+  display: none;
+}
+
+aside.menu-closed nav .menu-item-parent .arrow {
+  display: none;
+}
+
+aside.menu-closed nav .menu-item-parent {
+  justify-content: center; /* Centraliza o ícone do item pai */
+  padding: 12px 0; /* Ajuste para centralizar verticalmente no modo fechado */
+}
+aside.menu-closed nav .submenu {
+  display: none; /* Esconde o submenu no modo fechado */
+}
+
+
+/* Menu Header */
+.menu-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 0 var(--padding-base) 15px var(--padding-base); /* Padding para o conteúdo do header */
+  border-bottom: 1px solid var(--border-color);
+}
+
+.menu-header button {
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--primary-color);
+  margin-right: 15px;
+  padding: 0;
+  line-height: 1;
+}
+
+.menu-header h2 {
+  margin: 0;
+  font-size: 1.8em;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+nav {
+  flex-grow: 1;
+  padding: 0 var(--padding-base); /* Adiciona padding lateral para os itens de navegação */
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  margin-bottom: 8px;
+}
+
+/* Estilo para o item pai do menu (Configurações) */
+.menu-item-parent {
+  text-decoration: none;
+  color: var(--text-dark);
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+  background-color: transparent;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-item-parent:hover {
+  background-color: var(--hover-bg);
+  color: var(--primary-color);
+}
+
+.arrow {
+  font-size: 0.8em;
+  color: var(--secondary-color);
+  transition: transform 0.2s ease-in-out, color 0.2s ease;
+}
+
+.arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* Estilo para os links de submenu */
+nav a {
+  text-decoration: none;
+  color: var(--secondary-color);
+  padding: 10px 15px; /* Padding padrão para subitens */
+  display: block;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 0.95em;
+  font-weight: 400;
+}
+
+nav a:hover {
+  background-color: var(--hover-bg);
+  color: var(--primary-color);
+}
+
+nav a.active-link {
+  background-color: var(--active-bg);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+
+.submenu {
+  margin-top: 5px;
+  /* Ajuste crucial: Recuo para "Parametrização" */
+  /* Ele agora vai do padding do 'nav' + o recuo do submenu */
+  padding-left: 20px; /* Este padding é ADICIONAL ao padding do 'nav' */
+  font-size: 0.9em;
+}
+
+.submenu li {
+  margin-bottom: 4px;
+}
+
+/* Main Content Area */
+main {
+  flex-grow: 1;
+  padding: 30px;
+  overflow-y: auto;
+  background-color: var(--background-main);
+}
+
+main h2 {
+  color: var(--primary-color);
+  margin-bottom: 20px;
+  font-size: 2em;
+}
+
+main p {
+  line-height: 1.6;
+  color: var(--text-dark);
+}

@@ -1,0 +1,47 @@
+/* You can add global styles to this file, and also import other style files */
+/* Você pode manter importações de fontes aqui, se for usar */
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap'); */
+
+/* Variáveis CSS globais para cores e tamanhos - acessíveis em toda a aplicação */
+:root {
+  --primary-color: #007bff; /* Azul para destaque */
+  --primary-light: #e0f2ff; /* Azul claro para fundo ativo/hover */
+  --secondary-color: #6c757d; /* Cinza para texto secundário */
+  --background-sidebar: #f8f9fa; /* Fundo claro da barra lateral */
+  --background-main: #ffffff; /* Fundo branco para conteúdo principal */
+  --text-dark: #343a40; /* Texto escuro */
+  --text-light: #ffffff; /* Texto claro (para contraste) */
+  --hover-bg: #e9ecef; /* Fundo ao passar o mouse */
+  --active-bg: var(--primary-light); /* Fundo do item ativo usando o primary-light */
+  --border-color: #dee2e6; /* Cor de borda suave */
+  --shadow-color: rgba(0, 0, 0, 0.08); /* Sombra suave */
+
+  /* Tamanhos base */
+  --font-base: 16px;
+  --padding-base: 15px;
+  --border-radius-base: 8px;
+}
+
+/* Estilos globais para reset básico e fonte */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Fonte moderna */
+  background-color: var(--background-main);
+  color: var(--text-dark);
+  font-size: var(--font-base);
+}
+
+.toast-center-center {
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  position: fixed !important;
+}
+
+.toast {
+  font-size: 1.5rem !important; /* aumenta o texto */
+  padding: 20px 30px !important; /* aumenta o espaço interno */
+  max-width: 800px !important; /* aumenta largura se precisar */
+}
+

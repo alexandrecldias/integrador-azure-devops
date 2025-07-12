@@ -1,0 +1,39 @@
+<div class="parametrizacao-container">
+  <h2>Página de Parametrização</h2>
+
+  
+  <div *ngIf="isLoading" class="loading-indicator">
+    Carregando parâmetros...
+  </div>
+
+  <div *ngIf="!isLoading && parametros.length > 0" class="parametros-grid">
+    <table>
+      <thead>
+        <tr>
+          <th>Chave</th>
+          <th>Valor</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let parametro of parametros">
+          <td>{{ parametro.chave }}</td>
+          <td>
+            <input type="text" [(ngModel)]="parametro.valor" class="input-valor" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div *ngIf="!isLoading && parametros.length === 0" class="no-data">
+    Nenhum parâmetro encontrado.
+  </div>
+
+
+</div>
+
+    <div class="button-group">
+        <button class="btn btn-save" (click)="salvar()">Salvar</button>
+        <button class="btn btn-back" (click)="voltar()">Voltar</button>
+    </div>

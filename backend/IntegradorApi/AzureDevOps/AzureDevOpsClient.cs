@@ -243,7 +243,7 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
                     return "Banco de dados";
             }
 
-            return "Análise";
+            return "Analise";
         }
 
         private string ExtrairHashCommit(string descricao)

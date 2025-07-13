@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using IntegradorApi.Infrastructure.Interfaces;
 using Newtonsoft.Json.Linq;
 
@@ -19,8 +20,10 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
             // Descobrir ID da US associada
             int idUS = 0;
             var relations = workItem["relations"];
+            string hashCommit = string.Empty;
             if (relations != null)
             {
+                // Procura a US associada
                 foreach (var relation in relations)
                 {
                     var rel = relation["rel"]?.ToString();
@@ -30,6 +33,23 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
                         var idStr = url.Split("/").Last();
                         idUS = int.Parse(idStr);
                         break;
+                    }
+                }
+                // Procura novamente pelo commit associado
+                foreach (var relation in relations)
+                {
+                    var rel = relation["rel"]?.ToString();
+                    var url = relation["url"]?.ToString();
+                    // Se for um link de commit
+                    if (rel == "ArtifactLink" && url != null && url.StartsWith("vstfs:///Git/Commit/"))
+                    {
+                        // Divide a URL com base em %2F e pega a última parte como commit hash
+                        var partes = url.Split(new[] { "%2F" }, StringSplitOptions.RemoveEmptyEntries);
+                        if (partes.Length > 0)
+                        {
+                            hashCommit = partes.Last(); // Última parte é o hash real
+                            break;
+                        }
                     }
                 }
             }
@@ -52,12 +72,8 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
                 string horasEstimadasUS = usWorkItem["fields"]["Microsoft.VSTS.Scheduling.OriginalEstimate"]?.ToString();
 
                 double.TryParse(horasEstimadasUS, out double horas);
-                string complexidade = horas switch
-                {
-                    < 8 => "Muito Simples",
-                    < 16 => "Simples",
-                    _ => "Complexa"
-                };
+                string complexidade = ObterComplexidadePorHora(horas);
+
 
                 idPbiDestino = await CriarPbiDestino(
                     destinoUrl, patDestino, projetoDestino,
@@ -76,13 +92,13 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
             string horasRestantes = workItem["fields"]["Microsoft.VSTS.Scheduling.RemainingWork"]?.ToString();
             string horasCompletadas = workItem["fields"]["Microsoft.VSTS.Scheduling.CompletedWork"]?.ToString();
             string prioridade = workItem["fields"]["Microsoft.VSTS.Common.Priority"]?.ToString();
-            string tipoTask = "Atendimento ao cliente";
-
+            string tipoTask = ObterTipoTaskPorDescricao(descricao);
+ 
             return await CriarTaskDestino(
                 destinoUrl, patDestino, projetoDestino, titulo, descricao,
                 horasEstimadas, horasRestantes, horasCompletadas,
                 prioridade, tipoTask, idPbiDestino, iterationPath,
-                atividade, responsavel, idWorkItemOrigem
+                atividade, responsavel, idWorkItemOrigem, hashCommit
             );
         }
 
@@ -154,7 +170,7 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
         private async Task<int> CriarTaskDestino(string baseUrl, string pat, string projeto,
             string titulo, string descricao, string horasEstimadas, string horasRestantes,
             string horasCompletadas, string prioridade, string tipoTask, int idPbi,
-            string iterationPath, string atividade, string responsavel, int idWorkItemOrigem)
+            string iterationPath, string atividade, string responsavel, int idWorkItemOrigem, string hashCommit)
         {
             using var client = new HttpClient();
             client.BaseAddress = new Uri(baseUrl);
@@ -174,6 +190,8 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
                     new JObject { { "op", "add" }, { "path", "/fields/Microsoft.VSTS.Scheduling.CompletedWork" }, { "value", horasCompletadas } },
                     new JObject { { "op", "add" }, { "path", "/fields/Microsoft.VSTS.Common.Priority" }, { "value", prioridade } },
                     new JObject { { "op", "add" }, { "path", "/fields/Custom.TypeTask" }, { "value", tipoTask } },
+                    new JObject { { "op", "add" }, { "path", "/fields/Custom.Commit" }, { "value", hashCommit } },
+
                     new JObject
                     {
                         { "op", "add" },
@@ -197,5 +215,63 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
             var jsonResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
             return (int)jsonResponse["id"];
         }
+
+        private string ObterComplexidadePorHora(double horas)
+        {
+            return horas switch
+            {
+                < 8 => "Muito Simples",
+                < 16 => "Simples",
+                _ => "Complexa"
+            };
+        }
+
+        private string ObterTipoTaskPorDescricao(string descricao)
+        {
+            if (descricao.Contains("commit", StringComparison.OrdinalIgnoreCase))
+                return "Desenvolvimento";
+
+            if (descricao.Contains("reunião", StringComparison.OrdinalIgnoreCase))
+                return "Reunião";
+
+            // Comandos SQL que indicam alteração no banco de dados
+            string[] comandosSql = { "update", "delete", "insert", "alter", "drop", "create", "truncate", "merge" };
+
+            foreach (var comando in comandosSql)
+            {
+                if (descricao.Contains(comando, StringComparison.OrdinalIgnoreCase))
+                    return "Banco de dados";
+            }
+
+            return "Análise";
+        }
+
+        private string ExtrairHashCommit(string descricao)
+        {
+            if (string.IsNullOrWhiteSpace(descricao))
+                return string.Empty;
+
+            var linhas = descricao.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 0; i < linhas.Length - 1; i++)
+            {
+                if (linhas[i].Trim().Equals("Commit", StringComparison.OrdinalIgnoreCase))
+                {
+                    var hashPossivel = linhas[i + 1].Trim();
+
+                    // Verifica se o hash tem entre 7 e 40 caracteres e contém apenas a-f e 0-9
+                    if (Regex.IsMatch(hashPossivel, @"\b[a-fA-F0-9]{7,40}\b"))
+                    {
+                        return hashPossivel;
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
+
+
+
+
     }
 }

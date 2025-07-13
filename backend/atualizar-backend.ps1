@@ -16,6 +16,11 @@ docker stop integrador-api 2>$null
 docker rm integrador-api 2>$null
 
 Write-Host "🚀 Subindo container atualizado..."
-docker run -d -p 5000:8080 --name integrador-api integrador-api
+docker run -d --name integrador-api `
+  --network integrador-net `
+  -p 5000:8080 `
+  integrador-api
 
 Write-Host "✅ Container atualizado e em execução: http://localhost:5000"
+
+

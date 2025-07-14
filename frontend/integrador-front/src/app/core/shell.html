@@ -1,16 +1,26 @@
-<div class="container">
-  <aside [class.menu-closed]="!isMenuOpen">
+<mat-sidenav-container class="container">
+  <mat-sidenav
+    [mode]="isMobile ? 'over' : 'side'"
+    [(opened)]="isMenuOpen"
+    class="sidebar"
+    [ngClass]="{ 'menu-closed': !isMenuOpen }"
+    (mouseenter)="onHoverMenu(true)"
+    (mouseleave)="onHoverMenu(false)">
+
     <div class="menu-header">
-      <button (click)="toggleMenu()">☰</button>
-      <h2>Menu</h2>
+      <button mat-icon-button (click)="toggleMenu()">
+        <mat-icon class="material-symbols-outlined">menu</mat-icon>
+      </button>
+      <h2 *ngIf="isMenuOpen">Menu</h2>
     </div>
+
     <nav>
       <ul>
-        <!-- Configurações -->
         <li>
           <span class="menu-item-parent" (click)="toggleConfiguracoesSubmenu()">
-            Configurações
-            <span class="arrow" [class.rotated]="isConfiguracoesSubmenuOpen">▼</span>
+            <mat-icon class="material-symbols-outlined">settings</mat-icon>
+            <span *ngIf="isMenuOpen">Configurações</span>
+            <span class="arrow" [class.rotated]="isConfiguracoesSubmenuOpen" *ngIf="isMenuOpen">▼</span>
           </span>
           <ul *ngIf="isConfiguracoesSubmenuOpen" class="submenu">
             <li>
@@ -21,11 +31,11 @@
           </ul>
         </li>
 
-        <!-- Processamento -->
         <li>
           <span class="menu-item-parent" (click)="toggleProcessamentoSubmenu()">
-            Processamento
-            <span class="arrow" [class.rotated]="isProcessamentoSubmenuOpen">▼</span>
+            <mat-icon class="material-symbols-outlined">construction</mat-icon>
+            <span *ngIf="isMenuOpen">Processamento</span>
+            <span class="arrow" [class.rotated]="isProcessamentoSubmenuOpen" *ngIf="isMenuOpen">▼</span>
           </span>
           <ul *ngIf="isProcessamentoSubmenuOpen" class="submenu">
             <li>
@@ -37,9 +47,23 @@
         </li>
       </ul>
     </nav>
-  </aside>
 
-  <main>
+    <div class="theme-toggle-container">
+      <button mat-raised-button color="primary" (click)="toggleTheme()">
+        <mat-icon class="material-symbols-outlined">contrast</mat-icon> 
+        <span *ngIf="isMenuOpen">Alternar Tema</span>
+      </button>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="content">
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="toggleMenu()">
+        <mat-icon class="material-symbols-outlined">menu</mat-icon>
+      </button>
+      <span>Sistema Integrador de Tasks do Azure DevOps</span>
+    </mat-toolbar>
+
     <router-outlet></router-outlet>
-  </main>
-</div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

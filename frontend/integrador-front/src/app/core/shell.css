@@ -9,19 +9,21 @@
 aside {
   width: 250px;
   background-color: var(--background-sidebar);
-  padding: var(--padding-base) 0; /* Padding superior/inferior, 0 nas laterais para controle interno */
+  padding: var(--padding-base) 0;
   box-shadow: 2px 0 10px var(--shadow-color);
   transition: width 0.3s ease, padding 0.3s ease;
   flex-shrink: 0;
   border-right: 1px solid var(--border-color);
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Changed to column to allow space-between */
+  height: 100%; /* ESTE É O PONTO CRÍTICO */
+
 }
 
 /* Estado do menu fechado */
 aside.menu-closed {
   width: 70px;
-  padding: var(--padding-base) 10px; /* Padding menor quando fechado */
+  padding: var(--padding-base) 10px;
 }
 
 aside.menu-closed .menu-header h2 {
@@ -33,11 +35,11 @@ aside.menu-closed nav .menu-item-parent .arrow {
 }
 
 aside.menu-closed nav .menu-item-parent {
-  justify-content: center; /* Centraliza o ícone do item pai */
-  padding: 12px 0; /* Ajuste para centralizar verticalmente no modo fechado */
+  justify-content: center;
+  padding: 12px 0;
 }
 aside.menu-closed nav .submenu {
-  display: none; /* Esconde o submenu no modo fechado */
+  display: none;
 }
 
 
@@ -46,7 +48,7 @@ aside.menu-closed nav .submenu {
   display: flex;
   align-items: center;
   margin-bottom: 30px;
-  padding: 0 var(--padding-base) 15px var(--padding-base); /* Padding para o conteúdo do header */
+  padding: 0 var(--padding-base) 15px var(--padding-base);
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -71,8 +73,8 @@ aside.menu-closed nav .submenu {
 }
 
 nav {
-  flex-grow: 1;
-  padding: 0 var(--padding-base); /* Adiciona padding lateral para os itens de navegação */
+  flex-grow: 1; /* Allows nav to take up available space */
+  padding: 0 var(--padding-base);
 }
 
 nav ul {
@@ -91,13 +93,16 @@ nav li {
   color: var(--text-dark);
   padding: 12px 15px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: center; /* Align items for icon and text */
   border-radius: var(--border-radius-base);
   cursor: pointer;
   background-color: transparent;
   font-weight: 500;
   transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-item-parent mat-icon { /* Added style for mat-icon within menu-item-parent */
+  margin-right: 10px; /* Space between icon and text */
 }
 
 .menu-item-parent:hover {
@@ -106,6 +111,7 @@ nav li {
 }
 
 .arrow {
+  margin-left: auto; /* Pushes the arrow to the right */
   font-size: 0.8em;
   color: var(--secondary-color);
   transition: transform 0.2s ease-in-out, color 0.2s ease;
@@ -119,7 +125,7 @@ nav li {
 nav a {
   text-decoration: none;
   color: var(--secondary-color);
-  padding: 10px 15px; /* Padding padrão para subitens */
+  padding: 10px 15px;
   display: block;
   border-radius: 6px;
   transition: background-color 0.2s ease, color 0.2s ease;
@@ -141,9 +147,7 @@ nav a.active-link {
 
 .submenu {
   margin-top: 5px;
-  /* Ajuste crucial: Recuo para "Parametrização" */
-  /* Ele agora vai do padding do 'nav' + o recuo do submenu */
-  padding-left: 20px; /* Este padding é ADICIONAL ao padding do 'nav' */
+  padding-left: 20px;
   font-size: 0.9em;
 }
 
@@ -168,4 +172,66 @@ main h2 {
 main p {
   line-height: 1.6;
   color: var(--text-dark);
+}
+
+.toggle-btn {
+  padding: 10px 20px;
+  border: none;
+  background-color: var(--primary-color);
+  color: var(--bg-color);
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.container {
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  display: flex; /* Ensure flexbox for vertical alignment */
+  flex-direction: column; /* Arrange items in a column */
+}
+
+.sidebar.menu-closed {
+  width: 70px;
+}
+
+/* On hover, expand sidebar */
+.sidebar:hover {
+  width: 250px;
+}
+
+/* Hide text content when menu is closed or on hover when closed */
+.sidebar.menu-closed .menu-header h2,
+.sidebar.menu-closed .menu-item-parent span,
+.sidebar.menu-closed .submenu a,
+.sidebar.menu-closed .arrow,
+.sidebar.menu-closed .theme-toggle-container span {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Show text content when menu is open or on hover when open */
+.sidebar:not(.menu-closed) .menu-header h2,
+.sidebar:not(.menu-closed) .menu-item-parent span,
+.sidebar:not(.menu-closed) .submenu a,
+.sidebar:not(.menu-closed) .arrow,
+.sidebar:not(.menu-closed) .theme-toggle-container span {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+.theme-toggle-container {
+  margin-top: auto; /* Pushes the element to the bottom */
+  padding: 10px 16px;
 }

@@ -6,16 +6,22 @@ import { ClonarTasksComponent } from './pages/clonar-tasks/clonar-tasks-componen
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'configuracoes/parametrizacao',
-    pathMatch: 'full'
+    component: Shell,
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./pages/home/home.component').then(m => m.HomeComponent)
+      }
+    ]
   },
   {
     path: 'configuracoes',
-    component: Shell, // Usando a classe Shell
+    component: Shell,
     children: [
       {
         path: 'parametrizacao',
-        component: Parametrizacao, // Usando a classe Parametrizacao
+        component: Parametrizacao,
         title: 'Parametrização'
       }
     ]
@@ -27,8 +33,7 @@ export const routes: Routes = [
       {
         path: 'clonar-tasks',
         loadComponent: () =>
-          import('./pages/clonar-tasks/clonar-tasks-component')
-          .then(m => m.ClonarTasksComponent),
+          import('./pages/clonar-tasks/clonar-tasks-component').then(m => m.ClonarTasksComponent),
       }
     ]
   },

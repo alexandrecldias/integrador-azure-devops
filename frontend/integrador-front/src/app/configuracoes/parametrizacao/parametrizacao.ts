@@ -6,6 +6,8 @@ import { ParametroService } from '../../services/parametro.service'; // Importe 
 import { Parametro } from '../../models/parametro'; // Importe a interface
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
+import { Router } from '@angular/router';
+
 
 
 @Component({
@@ -19,7 +21,7 @@ export class Parametrizacao implements OnInit { // Implemente OnInit
   parametros: Parametro[] = []; // Array para armazenar os dados da API
   isLoading = true; // Para mostrar um indicador de carregamento
 
-  constructor(private parametroService: ParametroService, private toastr: ToastrService) { } // Injeta o serviço
+  constructor(private parametroService: ParametroService, private toastr: ToastrService, private router: Router) { } // Injeta o serviço
 
   ngOnInit(): void {
     this.loadParametros(); // Carrega os parâmetros ao inicializar o componente
@@ -58,6 +60,7 @@ export class Parametrizacao implements OnInit { // Implemente OnInit
 
 
   voltar(): void {
-    console.log('Botão Voltar clicado!');
+    this.router.navigate(['/']);
   }
+
 }

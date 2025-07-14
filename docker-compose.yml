@@ -1,0 +1,37 @@
+services:
+  frontend:
+    build: ./frontend/integrador-front
+    ports:
+      - "8080:80"
+    depends_on:
+      - integrador-api
+    networks:
+      - integrador-net
+
+  integrador-api:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql-integrador
+    networks:
+      - integrador-net
+
+  mysql-integrador:
+    image: mysql:8
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: senha123
+      MYSQL_DATABASE: integrador
+    networks:
+      - integrador-net
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
+
+networks:
+  integrador-net:
+    driver: bridge

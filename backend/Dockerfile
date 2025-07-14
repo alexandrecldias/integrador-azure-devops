@@ -16,8 +16,9 @@ WORKDIR /app
 # Copia a build do stage anterior
 COPY --from=build /app/out .
 
-# Porta exposta (ajuste conforme necessário)
+# ✅ Altere aqui para garantir que o ASP.NET escute na porta 5000
+ENV ASPNETCORE_URLS=http://+:5000
+
 EXPOSE 5000
 
-# Executa a API
 ENTRYPOINT ["dotnet", "IntegradorApi.dll"]

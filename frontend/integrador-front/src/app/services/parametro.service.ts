@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'; // Importe HttpClient
+import { HttpClient, HttpHeaders } from '@angular/common/http'; // Importe HttpClient
 import { Observable } from 'rxjs'; // Importe Observable
 import { Parametro } from '../models/parametro'; // Importe a interface Parametro
 
@@ -18,8 +18,15 @@ export class ParametroService {
     return this.http.get<Parametro[]>(this.apiUrl);
   }
 
-  // Futuramente, adicionaremos métodos para salvar (PUT/POST) aqui
-  // saveParametro(parametro: Parametro): Observable<Parametro> {
-  //   return this.http.put<Parametro>(`${this.apiUrl}/${parametro.id}`, parametro);
-  // }
+/**
+   * Atualiza o valor de um parâmetro específico via PUT.
+   * Exemplo: salvar o parâmetro "RESPONSAVEL_TASK" com valor "alexandrecldias"
+   */
+   saveParametro(nomeParametro: string, valor: string): Observable<any> {
+      const url = `${this.apiUrl}/${nomeParametro}`;
+      const body = { valor };
+      const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+      return this.http.put(url, body, { headers });
+    } 
 }

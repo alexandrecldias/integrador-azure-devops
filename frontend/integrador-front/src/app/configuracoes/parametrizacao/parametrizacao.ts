@@ -4,6 +4,9 @@ import { FormsModule } from '@angular/forms'; // Para ngModel (edição bidireci
 
 import { ParametroService } from '../../services/parametro.service'; // Importe o serviço
 import { Parametro } from '../../models/parametro'; // Importe a interface
+import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
+
 
 @Component({
   selector: 'app-parametrizacao',
@@ -16,7 +19,7 @@ export class Parametrizacao implements OnInit { // Implemente OnInit
   parametros: Parametro[] = []; // Array para armazenar os dados da API
   isLoading = true; // Para mostrar um indicador de carregamento
 
-  constructor(private parametroService: ParametroService) { } // Injeta o serviço
+  constructor(private parametroService: ParametroService, private toastr: ToastrService) { } // Injeta o serviço
 
   ngOnInit(): void {
     this.loadParametros(); // Carrega os parâmetros ao inicializar o componente
@@ -37,15 +40,24 @@ export class Parametrizacao implements OnInit { // Implemente OnInit
     });
   }
 
-  // Futuras funções para Salvar e Voltar
   salvar(): void {
-    console.log('Botão Salvar clicado!', this.parametros);
-    // Aqui virá a lógica de chamar a API de salvar
-  }
+  const chamadas = this.parametros.map(param =>
+    this.parametroService.saveParametro(param.chave, param.valor)
+  );
+
+  forkJoin(chamadas).subscribe({
+    next: () => {
+      this.toastr.success('Parâmetros salvos com sucesso!', 'Sucesso');
+    },
+    error: (err) => {
+      this.toastr.error('Erro ao salvar parâmetros.', 'Erro');
+      console.error(err);
+    }
+  });
+}
+
 
   voltar(): void {
     console.log('Botão Voltar clicado!');
-    // Aqui virá a lógica de navegação ou descarte de alterações
-    // Ex: this.router.navigate(['/']); // Se tiver injetado Router
   }
 }

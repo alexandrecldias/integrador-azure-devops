@@ -1,5 +1,7 @@
 .parametrizacao-container {
   padding: 20px;
+  width: 100%;
+  max-width: 1200px; /* Limite máximo para telas grandes */
   background-color: var(--background-main);
   border-radius: var(--border-radius-base);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -56,18 +58,23 @@ h2 {
 }
 
 .parametros-grid {
-  overflow-x: auto; /* Para grids maiores em telas menores */
+  width: 100%;
+  max-width: 1200px; /* ou o valor que desejar */
+  margin: 0 auto;
+  overflow-x: auto;
 }
+
 
 table {
   width: 100%;
-  border-collapse: collapse; /* Remove espaçamento entre células */
+  table-layout: fixed; /* Importante para forçar o controle de largura das colunas */
+  border-collapse: collapse;
   margin-top: 15px;
   background-color: var(--background-main);
   border-radius: var(--border-radius-base);
-  overflow: hidden; /* Para que o border-radius funcione com as bordas da tabela */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
+
 
 table thead {
   background-color: var(--primary-light); /* Fundo claro para o cabeçalho */

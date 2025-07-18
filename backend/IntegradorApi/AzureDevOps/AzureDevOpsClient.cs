@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Net;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using IntegradorApi.Infrastructure.Interfaces;
@@ -177,6 +178,9 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
                 Convert.ToBase64String(Encoding.ASCII.GetBytes($":{pat}")));
 
+            //var htmlSeguro = WebUtility.HtmlEncode(SanitizeDescricao(descricao));
+
+
             var json = new JArray
                 {
                     new JObject { { "op", "add" }, { "path", "/fields/System.Title" }, { "value", $"{idWorkItemOrigem}-{titulo}" } },
@@ -210,7 +214,10 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
             var content = new StringContent(json.ToString(), Encoding.UTF8, "application/json-patch+json");
             var response = await client.PostAsync($"{projeto}/_apis/wit/workitems/$Task?api-version=6.0", content);
             if (!response.IsSuccessStatusCode)
-                return 0;
+            {
+                string content2 = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Sistema apresentou o seguinte erro {content2} ");
+            }
 
             var jsonResponse = JObject.Parse(await response.Content.ReadAsStringAsync());
             return (int)jsonResponse["id"];
@@ -226,13 +233,28 @@ namespace IntegradorApi.Infrastructure.AzureDevOps
             };
         }
 
+        public static string SanitizeDescricao(string html)
+        {
+            // Remove inputs
+            html = Regex.Replace(html, "<input[^>]*>", string.Empty, RegexOptions.IgnoreCase);
+
+            // Substitui &nbsp; por espaço normal
+            html = html.Replace("&nbsp;", " ");
+
+            // Substitui "->" por símbolo → ou traço simples
+            html = html.Replace("-&gt;", "→");
+
+            return html;
+        }
+
+
         private string ObterTipoTaskPorDescricao(string descricao)
         {
             if (descricao.Contains("commit", StringComparison.OrdinalIgnoreCase))
                 return "Desenvolvimento";
 
             if (descricao.Contains("reunião", StringComparison.OrdinalIgnoreCase))
-                return "Reunião";
+                return "Reuniao";
 
             // Comandos SQL que indicam alteração no banco de dados
             string[] comandosSql = { "update", "delete", "insert", "alter", "drop", "create", "truncate", "merge" };

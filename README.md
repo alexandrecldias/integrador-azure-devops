@@ -37,3 +37,14 @@ CREATE TABLE `Parametros` (
 
 
 ## DOCKER
+
+Onde está localizado o arquivo docker-compose.yml, rode no bash os comandos abaixo.
+
+docker-compose build
+docker-compose up -d
+
+ℹ️ Requisitos prévios
+
+Antes de rodar os comandos acima, a pessoa precisa:
+Ter o Docker e Docker Compose instalados
+Estar na pasta raiz do projeto onde está localizado o docker-compose.yml

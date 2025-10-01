@@ -32,6 +32,18 @@ CREATE TABLE `Parametros` (
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
+INSERT INTO parametros (chave, valor) VALUES
+('PAT_ORIGEM', 'XXX'),
+('PAT_DESTINO', 'XXX'),
+('ORIGEM_URL', 'XXX'),
+('DESTINO_URL', 'XXX'),
+('PROJETO_DESTINO', 'XXX'),
+('ITERATION_PATH', 'XXX'),
+('ATIVIDADE_TASK', 'XXX'),
+('RESPONSAVEL_TASK', 'XXXX');
+
+Primeiro Insert é ncessário, depois existe uma tela onde pode se alterar os valores.
+
 <img width="492" height="398" alt="image" src="https://github.com/user-attachments/assets/413df7d0-c00e-4e25-b618-56110391e855" />
 
 

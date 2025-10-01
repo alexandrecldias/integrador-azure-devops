@@ -11,4 +11,29 @@ Substituir uma aplicação console por uma aplicação web com interface amigáv
 - Angular
 - MariaDB via Docker
 
-## Estrutura
+## Banco de Dados
+
+A conexao possui os seguintes dados para configuração com o dbaver
+
+jdbc:mysql://localhost:3308/integrador?allowPublicKeyRetrieval=true&useSSL=false
+Usuario: root
+senha123
+<img width="590" height="580" alt="image" src="https://github.com/user-attachments/assets/e46b0fc5-0eb3-4f3f-a1b6-e53b1c918af2" />
+
+Necessário criar o banco de dados chamado integrador e com a tabela Parametros abaixo.
+
+CREATE TABLE `Parametros` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `chave` varchar(100) NOT NULL,
+  `valor` text NOT NULL,
+  `atualizado_em` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `chave` (`chave`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+<img width="492" height="398" alt="image" src="https://github.com/user-attachments/assets/413df7d0-c00e-4e25-b618-56110391e855" />
+
+
+
+## DOCKER
